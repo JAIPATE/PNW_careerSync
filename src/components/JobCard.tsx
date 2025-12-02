@@ -1,8 +1,8 @@
 
-
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { JobMatch, ResumeReportCard } from '../types';
 import { getSkillExplanation, tailorResumeForJob, getResumeReportCard } from '../services/geminiService';
+import { findCourseRecommendations } from '../services/recommendationEngine';
 import InfoIcon from './icons/InfoIcon';
 import Modal from './Modal';
 import Loader from './Loader';
@@ -12,6 +12,7 @@ import { useAppContext } from '../context/AppContext';
 import BrokenLinkIcon from './icons/BrokenLinkIcon';
 import ReportCardIcon from './icons/ReportCardIcon';
 import ResumeReportCardDisplay from './ResumeReportCardDisplay';
+import CourseRecommendations from './CourseRecommendations';
 
 interface JobCardProps {
   match: JobMatch;
@@ -59,6 +60,15 @@ const JobCard: React.FC<JobCardProps> = ({ match }) => {
   const [reportCardData, setReportCardData] = useState<ResumeReportCard | null>(null);
   const [isReportLoading, setIsReportLoading] = useState(false);
   const [showReportConfirmation, setShowReportConfirmation] = useState(false);
+
+  // Calculate course recommendations locally
+  // We combine both mandatory and preferred missing skills to find courses
+  const courseRecommendations = useMemo(() => {
+    return findCourseRecommendations([
+      ...match.missingMandatorySkills, 
+      ...match.missingPreferredSkills
+    ]);
+  }, [match.missingMandatorySkills, match.missingPreferredSkills]);
 
   const handleExplainSkill = async (skill: string) => {
     if (skillExplanations.has(skill)) {
@@ -132,7 +142,7 @@ const JobCard: React.FC<JobCardProps> = ({ match }) => {
 
   return (
     <>
-      <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-6 transition-all duration-300 hover:border-amber-400 hover:shadow-lg hover:shadow-amber-500/10">
+      <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-6 transition-all duration-300 hover:border-amber-400 hover:shadow-lg hover:shadow-amber-500/10 flex flex-col h-full">
         <div className="flex flex-col sm:flex-row gap-6">
           {/* Match Percentage Donut Chart */}
           <div className="flex-shrink-0 flex justify-center">
@@ -250,6 +260,11 @@ const JobCard: React.FC<JobCardProps> = ({ match }) => {
                   </div>
                 </div>
               )}
+
+              {/* -- ACADEMIC BRIDGE INTEGRATION -- */}
+              <CourseRecommendations recommendations={courseRecommendations} />
+              {/* -------------------------------- */}
+
             </div>
           </div>
         </div>

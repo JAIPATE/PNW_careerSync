@@ -1,3 +1,4 @@
+
 export enum AppStep {
   Resume = 'resume',
   Search = 'search',
@@ -36,6 +37,19 @@ export interface ResumeReportCard {
   formattingStructure: string; // Markdown list
 }
 
+// --- NEW TYPES FOR ACADEMIC BRIDGE ---
+export interface PNWCourse {
+  code: string;
+  title: string;
+  description: string;
+  keywords: string[]; // Skills taught in this course
+}
+
+export interface CourseRecommendation {
+  skill: string;
+  courses: PNWCourse[];
+}
+// -------------------------------------
 
 // Types for the new state management context
 export interface AppState {
