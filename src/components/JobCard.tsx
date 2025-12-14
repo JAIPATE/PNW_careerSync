@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { JobMatch, ResumeReportCard } from '../types';
 import { getSkillExplanation, tailorResumeForJob, getResumeReportCard } from '../services/geminiService';

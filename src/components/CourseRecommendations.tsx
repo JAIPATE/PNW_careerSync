@@ -7,38 +7,70 @@ interface CourseRecommendationsProps {
 }
 
 const CourseRecommendations: React.FC<CourseRecommendationsProps> = ({ recommendations }) => {
-  if (recommendations.length === 0) return null;
+  // Even if no recommendations, we show the widget with a general message for the demo
+  const hasRecommendations = recommendations.length > 0;
 
   return (
-    <div className="mt-4 bg-gray-900/80 border border-amber-500/30 rounded-lg p-4 animate-fade-in">
-      <div className="flex items-center gap-2 mb-3">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-amber-400" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2 .712V17a1 1 0 001 1z" />
-        </svg>
-        <h4 className="text-sm font-bold text-amber-300 uppercase tracking-wider">PNW Academic Bridge</h4>
-      </div>
-      <p className="text-xs text-gray-400 mb-4">
-        Based on your missing skills, we recommend the following Purdue Northwest courses to bridge the gap:
-      </p>
-      
-      <div className="space-y-4">
-        {recommendations.map((rec, index) => (
-          <div key={index} className="border-l-2 border-gray-700 pl-3 ml-1">
-            <p className="text-xs font-semibold text-red-300 mb-1">To learn: <span className="text-red-200">{rec.skill}</span></p>
-            <div className="flex flex-col gap-2">
-              {rec.courses.map(course => (
-                <div key={course.code} className="bg-gray-800 p-2 rounded border border-gray-700 hover:border-amber-500/50 transition-colors">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-bold text-white">{course.code}</span>
-                    <span className="text-[10px] px-1.5 py-0.5 bg-amber-900/30 text-amber-400 rounded border border-amber-500/20">Recommended</span>
-                  </div>
-                  <div className="text-xs text-gray-300 font-medium mt-1">{course.title}</div>
-                  <div className="text-[10px] text-gray-500 mt-0.5 line-clamp-2">{course.description}</div>
-                </div>
-              ))}
-            </div>
+    <div className="mt-6 pt-4 border-t border-gray-700/50">
+      <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl border border-amber-500/20 overflow-hidden shadow-sm">
+        {/* Header */}
+        <div className="px-4 py-3 bg-amber-500/10 border-b border-amber-500/20 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-xl">🎓</span>
+            <h4 className="text-sm font-bold text-amber-300 uppercase tracking-widest">PNW Academic Bridge</h4>
           </div>
-        ))}
+          <span className="text-[10px] bg-amber-900/60 text-amber-200 px-2 py-0.5 rounded-full border border-amber-500/30 font-medium">
+            Skill Gap Analysis
+          </span>
+        </div>
+        
+        {/* Content */}
+        <div className="p-4">
+          {hasRecommendations ? (
+            <>
+              <p className="text-xs text-gray-400 mb-5 leading-relaxed">
+                We identified specific skills in this job description that are missing from your resume. 
+                Here are <strong>Purdue Northwest</strong> courses recommended to help you bridge that gap:
+              </p>
+              
+              <div className="space-y-6">
+                {recommendations.map((rec, index) => (
+                  <div key={`${rec.skill}-${index}`} className="group">
+                    {/* Skill Header */}
+                    <div className="flex items-center gap-2 mb-3">
+                        <div className="w-1.5 h-1.5 rounded-full bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.5)]"></div>
+                        <p className="text-xs font-bold text-gray-300 uppercase tracking-wide">
+                            To learn: <span className="text-white border-b border-red-400/30 pb-0.5">{rec.skill}</span>
+                        </p>
+                    </div>
+                    
+                    {/* Course List */}
+                    <div className="grid gap-3 pl-3 border-l-[1.5px] border-gray-700 group-hover:border-amber-500/30 transition-colors duration-300 ml-0.5">
+                      {rec.courses.map(course => (
+                        <div key={course.code} className="bg-gray-800/40 hover:bg-gray-800 p-3 rounded-md border border-gray-700/50 hover:border-amber-500/30 transition-all duration-200 relative group/card">
+                          <div className="flex justify-between items-start mb-1">
+                            <span className="text-xs font-extrabold text-amber-400 font-mono tracking-tight">{course.code}</span>
+                          </div>
+                          <div className="text-sm text-gray-200 font-semibold mb-1.5">{course.title}</div>
+                          <p className="text-[11px] text-gray-500 leading-relaxed line-clamp-2 group-hover/card:line-clamp-none transition-all">
+                            {course.description}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="text-center py-4">
+              <p className="text-sm text-gray-300 font-medium">Great job! You match the key skills for this role.</p>
+              <p className="text-xs text-gray-500 mt-2">
+                For continued growth, consider exploring PNW's <strong>advanced electives</strong> or <strong>independent study</strong> options in your major.
+              </p>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
