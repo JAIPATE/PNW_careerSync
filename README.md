@@ -1,5 +1,10 @@
 <div align="center">
-   <img src="Careersync 4" alt="PNW CareerSync Logo" width="400">
+   <img src="Careersync 4.jpeg" alt="PNW CareerSync Logo" width="1000">
+   <img src="Careersync 2.jpeg" alt="PNW CareerSync Logo" width="1000">
+   <img src="Careersync 6.jpeg" alt="PNW CareerSync Logo" width="1000">
+   <img src="Careersync 1.jpeg" alt="PNW CareerSync Logo" width="1000">
+   <img src="Careersync 5.jpeg" alt="PNW CareerSync Logo" width="1000">
+   <img src="Careersync 3.jpeg" alt="PNW CareerSync Logo" width="1000">
 </div>
 
 ## Run Locally
