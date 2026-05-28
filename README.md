@@ -1,4 +1,5 @@
 <div align="center">
+   <img src="Careersync 4" alt="PNW CareerSync Logo" width="400">
 </div>
 
 ## Run Locally
